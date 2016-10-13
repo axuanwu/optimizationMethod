@@ -107,6 +107,6 @@ class lineSearch:
 
 if __name__ == "__main__":
 	aa = lineSearch()
-	aa.find_search_region()
-	print aa.final_solution()
-	print aa.test_solution()
+	aa.find_search_region()  # 找搜索区间
+	print aa.final_solution()  # 线搜最优解
+	print aa.test_solution()  # 测试结果是否满足 "高低高" 属性
