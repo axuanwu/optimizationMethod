@@ -7,7 +7,7 @@ import math
 
 class Newton:
 	def __init__(self):
-		# 需要进行线搜的目标函数
+		# 参数
 		self.A = 0
 		self.X = np.matrix([0, 0]).T
 		self.gx = np.matrix([0, 0]).T
