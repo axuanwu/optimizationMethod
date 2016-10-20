@@ -49,7 +49,7 @@ class Newton:
         # 迭代一次
         self.f_gx()
         self.dk = np.dot(self.H, self.gx)
-        self.dk = np.linalg.norm(self.dk)  # 归一化
+        self.dk = self.dk/np.linalg.norm(self.dk)  # 归一化
         # 线搜索
         XK0 = self.X.copy()
         self.myLineSearch.direction = self.dk  # 初始化方向
