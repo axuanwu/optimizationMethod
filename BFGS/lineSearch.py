@@ -32,7 +32,7 @@ class lineSearch:
 
     # 找到线搜的初始区间
     def find_search_region(self):
-        step = 0.1  # 初始步长
+        step = 0.0001  # 初始步长
         # sign = 1
         YS = self.my_function(self.XS)
         XE = self.XS + step * self.direction * self.sign  # 假设的结束位置
@@ -50,7 +50,7 @@ class lineSearch:
         # return XE
         else:
             self.sign *= -1  # 反向搜索
-            step = 1  # 初始步长
+            step = 0.0001  # 初始步长
             # sign = 1
             YS = self.my_function(self.XS)
             XE = self.XS + step * self.direction * self.sign  # 假设的结束位置

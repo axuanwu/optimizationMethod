@@ -9,11 +9,11 @@ class Newton2:
     def __init__(self):
         # 需要进行线搜的目标函数
         self.A = 0
-        self.X = np.matrix([-1.2, 1]).T  # 初始的迭代点
+        self.X = np.matrix([3, 4]).T  # 初始的迭代点
         self.H = np.eye(2)  # 初始 H 矩阵  满足正定即可
         self.gx = np.matrix([0, 0]).T
         self.dk = np.matrix([0, 0]).T
-        self.accuracy = 0.00001
+        self.accuracy = 0.001
         self.myLineSearch = lineSearch.lineSearch()
 
 
@@ -36,9 +36,18 @@ class Newton2:
         gx2 = 2 * r1 * 10 * 2 * x2
         self.gx = np.matrix([gx1, gx2]).T
 
+    def f_Gx(self):
+        x1 = self.X[0, 0]
+        x2 = self.X[1, 0]
+        G00 = 1200*x1*x1 - 400 * x2*x2 +2
+        G01 = -800*x1*x2
+        G10 = -800*x1*x2
+        G11 = 1200*x2*x2 -400*x1*x1
+        return np.matrix([[G00,G01],[G10,G11]])
 
     def final_solution(self):
         # 初始配置
+        # self.H = self.f_Gx()
         print self.X.T  # 打印搜索轨迹
         while self.next_solution():
             print self.X.T
@@ -63,10 +72,8 @@ class Newton2:
         Sk = Xk1 - XK0
         Yk = gk1 - gk0
         Hk0 = self.H
-        Hk1 = Hk0 + float(1 + float(np.dot(np.dot(Yk.T, Hk0), Yk)) / float(np.dot(Yk.T, Sk))) * np.dot(Sk,
-                                                                                                       Sk.T) / float(
-            np.dot(Yk.T, Sk)) \
-              - (np.dot(np.dot(Sk, Yk.T), Hk0) - np.dot(np.dot(Hk0, Yk), Sk.T)) / float(np.dot(Yk.T, Sk))
+        Hk1 = Hk0 + float(1 + float(np.dot(np.dot(Yk.T, Hk0), Yk)) / float(np.dot(Yk.T, Sk))) * np.dot(Sk,Sk.T) \
+            / float( np.dot(Yk.T, Sk)) - (np.dot(np.dot(Sk, Yk.T), Hk0) - np.dot(np.dot(Hk0, Yk), Sk.T)) / float(np.dot(Yk.T, Sk))
         self.H = Hk1
         a = np.linalg.norm(gk1.T)
         if a > self.accuracy:
