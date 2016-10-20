@@ -9,8 +9,8 @@ class lineSearch:
     def __init__(self):
         # 需要进行线搜的目标函数
         self.A = np.eye(2)  # 定义一个 系数
-        self.direction = np.array([1, 2]) / math.sqrt(5)  # 线搜方向
-        self.XS = np.array([3, 4])  # 起始位置
+        self.direction = np.matrix([1, 2]).T / math.sqrt(5)  # 线搜方向
+        self.XS = np.matrix([3, 4]).T  # 起始位置
         self.sign = 1  # 方向
         self.XE = self.XS
         self.distance = 1
@@ -26,14 +26,13 @@ class lineSearch:
         # fx = 3*x1^2+3*x2^2 - x1^2*x2
         x1 = X[0, 0]
         x2 = X[1, 0]
-        r1 = 10 * (x2 - x1 * x1)
+        r1 = 10 * (x2*x2 - x1 * x1)
         r2 = 1 - x1
         return r1 * r1 + r2 * r2
 
-
     # 找到线搜的初始区间
     def find_search_region(self):
-        step = 1  # 初始步长
+        step = 0.1  # 初始步长
         # sign = 1
         YS = self.my_function(self.XS)
         XE = self.XS + step * self.direction * self.sign  # 假设的结束位置
@@ -47,11 +46,25 @@ class lineSearch:
                 if YEN > YE:
                     break
             self.XE = XE
-            self.distance = sum((self.XE - self.XS) * self.direction)  # 有符号的距离可以为负数
+            self.distance =float((self.XE - self.XS).T * self.direction)  # 有符号的距离可以为负数
         # return XE
         else:
             self.sign *= -1  # 反向搜索
-            self.find_search_region()
+            step = 1  # 初始步长
+            # sign = 1
+            YS = self.my_function(self.XS)
+            XE = self.XS + step * self.direction * self.sign  # 假设的结束位置
+            YE = self.my_function(XE)
+            if YE < YS:
+                while True:
+                    step /= 0.5  # 加大步长
+                    XEN = XE + step * self.direction * self.sign
+                    YEN = self.my_function(XEN)
+                    XE = XEN
+                    if YEN > YE:
+                        break
+                self.XE = XE
+                self.distance =float((self.XE - self.XS).T * self.direction)  # 有符号的距离可以为负数
 
     def final_solution(self):
         # 初始配置
@@ -61,7 +74,7 @@ class lineSearch:
         self.YXE = self.my_function(self.XE)
         while self.next_solution():
             pass
-        # print self.XG0, self.distance
+            # print self.XG0, self.distance
         return self.XG0
 
     def next_solution(self):

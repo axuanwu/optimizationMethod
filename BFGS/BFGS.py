@@ -5,8 +5,7 @@ import numpy as np
 import math
 
 
-class Newton:
-
+class Newton2:
     def __init__(self):
         # 需要进行线搜的目标函数
         self.A = 0
@@ -23,7 +22,7 @@ class Newton:
         # fx = 3*x1^2+3*x2^2 - x1^2*x2
         x1 = X[0, 0]
         x2 = X[1, 0]
-        r1 = 10 * (x2 - x1 * x1)
+        r1 = 10 * (x2 * x2 - x1 * x1)
         r2 = 1 - x1
         return r1 * r1 + r2 * r2
 
@@ -31,10 +30,10 @@ class Newton:
     def f_gx(self):
         x1 = self.X[0, 0]
         x2 = self.X[1, 0]
-        r1 = 10 * (x2 - x1 * x1)
+        r1 = 10 * (x2 * x2 - x1 * x1)
         r2 = 1 - x1
         gx1 = 2 * r1 * (-10 * 2 * x1) + 2 * r2 * (-1)
-        gx2 = 2 * r1 * 10
+        gx2 = 2 * r1 * 10 * 2 * x2
         self.gx = np.matrix([gx1, gx2]).T
 
 
@@ -49,21 +48,25 @@ class Newton:
         # 迭代一次
         self.f_gx()
         self.dk = np.dot(self.H, self.gx)
-        self.dk = self.dk/np.linalg.norm(self.dk)  # 归一化
+        self.dk = self.dk / np.linalg.norm(self.dk)  # 归一化
         # 线搜索
         XK0 = self.X.copy()
-        self.myLineSearch.direction = self.dk  # 初始化方向
-        self.myLineSearch.XS = self.X  # 初始化起点
+        self.myLineSearch.direction = self.dk.copy()  # 初始化方向
+        self.myLineSearch.XS = self.X.copy()  # 初始化起点
+        self.myLineSearch.find_search_region()
         Xk1 = self.myLineSearch.final_solution()  #
-        gk0 = self.gx
+        print self.myLineSearch.test_solution()
+        gk0 = self.gx.copy()
         self.X = Xk1
         self.f_gx()
         gk1 = self.gx
         Sk = Xk1 - XK0
         Yk = gk1 - gk0
         Hk0 = self.H
-        Hk1 = Hk0 + (1+np.dot(np.dot(Yk.T,Hk0),Yk)/np.dot(Yk.T,Sk))*np.dot(Sk,Sk.T)/np.dot(Yk.T,Sk) \
-            - (np.dot(np.dot(Sk,Yk.T),Hk0)-np.dot(np.dot(Hk0,Yk),Sk.T))/np.dot(Yk.T,Sk)
+        Hk1 = Hk0 + float(1 + float(np.dot(np.dot(Yk.T, Hk0), Yk)) / float(np.dot(Yk.T, Sk))) * np.dot(Sk,
+                                                                                                       Sk.T) / float(
+            np.dot(Yk.T, Sk)) \
+              - (np.dot(np.dot(Sk, Yk.T), Hk0) - np.dot(np.dot(Hk0, Yk), Sk.T)) / float(np.dot(Yk.T, Sk))
         self.H = Hk1
         a = np.linalg.norm(gk1.T)
         if a > self.accuracy:
@@ -73,5 +76,5 @@ class Newton:
 
 
 if __name__ == "__main__":
-    aa = Newton()
+    aa = Newton2()
     aa.final_solution()  # 找最优解

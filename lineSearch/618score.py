@@ -9,7 +9,7 @@ class lineSearch:
     def __init__(self):
         # 需要进行线搜的目标函数
         self.A = np.eye(2)  # 定义一个 系数
-        self.direction = np.matrix([1, 2]).T / math.sqrt(5)  # 线搜方向
+        self.direction = np.matrix([3, 4]).T / math.sqrt(5)  # 线搜方向
         self.XS = np.matrix([3, 4]).T  # 起始位置
         self.sign = 1  # 方向
         self.XE = self.XS
@@ -44,7 +44,7 @@ class lineSearch:
                 if YEN > YE:
                     break
             self.XE = XE
-            self.distance = np.linalg.norm(self.XE - self.XS)  # 有符号的距离可以为负数
+            self.distance =float((self.XE - self.XS).T * self.direction)  # 有符号的距离可以为负数
         # return XE
         else:
             self.sign *= -1  # 反向搜索
