@@ -85,3 +85,4 @@ class Newton2:
 if __name__ == "__main__":
     aa = Newton2()
     aa.final_solution()  # 找最优解
+    print 0
