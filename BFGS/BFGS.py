@@ -1,9 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# from lineSearch import lineSearch  # 精确线搜
-from wolfSearch import lineSearch  # wolf 非精确线搜
+from lineSearch import lineSearch  # 精确线搜
+# from wolfSearchStrong import lineSearch  # wolf 非精确线搜
+# from wolfSearch import lineSearch  # wolf 非精确线搜
+
 # import numpy as np
-from function2dim import *
+from function2dim2 import *
 
 
 # import wolfSearch
@@ -24,8 +26,10 @@ class Newton2:
         # 初始配置
         # self.H = self.f_Gx()
         print self.X.T  # 打印搜索轨迹
+        i=0
         while self.next_solution():
-            # print self.X.T
+            print i, self.X.T
+            i+=1
             pass
 
     def next_solution(self):
@@ -49,7 +53,7 @@ class Newton2:
         Hk1 = Hk0 + float(1 + float(np.dot(np.dot(Yk.T, Hk0), Yk)) / float(np.dot(Yk.T, Sk))) * np.dot(Sk, Sk.T) \
             / float(np.dot(Yk.T, Sk)) - (np.dot(np.dot(Sk, Yk.T), Hk0) - np.dot(np.dot(Hk0, Yk), Sk.T)) / float(np.dot(Yk.T, Sk))
         self.H = Hk1
-        a = np.linalg.norm(np.dot(Hk1, gk1))
+        a = np.linalg.norm(gk1)
         if a > self.accuracy:
             return True
         else:

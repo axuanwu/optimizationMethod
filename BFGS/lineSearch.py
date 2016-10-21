@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from function2dim import *
+from function2dim2 import *
 import math
 
 
@@ -25,7 +25,7 @@ class lineSearch:
 
     # 找到线搜的初始区间
     def find_search_region(self):
-        step = 0.0001  # 初始步长
+        step = 0.001  # 初始步长
         # sign = 1
         YS = my_function(self.XS)
         XE = self.XS + step * self.direction * self.sign  # 假设的结束位置
