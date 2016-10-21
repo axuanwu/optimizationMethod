@@ -1,11 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import numpy as np
+from function2dim import *
 import math
 
 
 class lineSearch:
+
     def __init__(self):
         # 需要进行线搜的目标函数
         self.A = np.eye(2)  # 定义一个 系数
@@ -22,56 +23,50 @@ class lineSearch:
         self.YXE = 0  # 区间结束的函数值
         self.accuracy = 0.0001
 
-    def my_function(self, X):
-        # fx = 3*x1^2+3*x2^2 - x1^2*x2
-        x1 = X[0, 0]
-        x2 = X[1, 0]
-        r1 = 10 * (x2*x2 - x1 * x1)
-        r2 = 1 - x1
-        return r1 * r1 + r2 * r2
-
     # 找到线搜的初始区间
     def find_search_region(self):
         step = 0.0001  # 初始步长
         # sign = 1
-        YS = self.my_function(self.XS)
+        YS = my_function(self.XS)
         XE = self.XS + step * self.direction * self.sign  # 假设的结束位置
-        YE = self.my_function(XE)
+        YE = my_function(XE)
         if YE < YS:
             while True:
                 step /= 0.5  # 加大步长
                 XEN = XE + step * self.direction * self.sign
-                YEN = self.my_function(XEN)
+                YEN = my_function(XEN)
                 XE = XEN
                 if YEN > YE:
                     break
             self.XE = XE
-            self.distance =float((self.XE - self.XS).T * self.direction)  # 有符号的距离可以为负数
+            self.distance = float((self.XE - self.XS).T * self.direction)  # 有符号的距离可以为负数
         # return XE
         else:
             self.sign *= -1  # 反向搜索
             step = 0.0001  # 初始步长
             # sign = 1
-            YS = self.my_function(self.XS)
+            YS = my_function(self.XS)
             XE = self.XS + step * self.direction * self.sign  # 假设的结束位置
-            YE = self.my_function(XE)
+            YE = my_function(XE)
             if YE < YS:
                 while True:
                     step /= 0.5  # 加大步长
                     XEN = XE + step * self.direction * self.sign
-                    YEN = self.my_function(XEN)
+                    YEN = my_function(XEN)
                     XE = XEN
                     if YEN > YE:
                         break
                 self.XE = XE
-                self.distance =float((self.XE - self.XS).T * self.direction)  # 有符号的距离可以为负数
+                self.distance = float((self.XE - self.XS).T * self.direction)  # 有符号的距离可以为负数
 
     def final_solution(self):
+        # 找到线搜区间
+        self.find_search_region()
         # 初始配置
         self.XG0 = self.XS + self.GoldenNum * self.distance * self.direction
-        self.YG0 = self.my_function(self.XG0)
-        self.YXS = self.my_function(self.XS)
-        self.YXE = self.my_function(self.XE)
+        self.YG0 = my_function(self.XG0)
+        self.YXS = my_function(self.XS)
+        self.YXE = my_function(self.XE)
         while self.next_solution():
             pass
             # print self.XG0, self.distance
@@ -83,7 +78,7 @@ class lineSearch:
         # XG1 需要尝试的另外一个黄金分割点
         self.GoldenNum = 1 - self.GoldenNum
         XG1 = self.XS + self.GoldenNum * self.distance * self.direction  # 找到另一个点
-        YG1 = self.my_function(XG1)
+        YG1 = my_function(XG1)
         if YG1 > self.YG0:
             if self.GoldenNum < 0.5:  # G1点切换为开始点 G0 保持 分割比 结束点保持 距离缩小
                 self.XS = XG1
@@ -116,7 +111,7 @@ class lineSearch:
     def test_solution(self):
         x0 = self.XG0 + self.accuracy * self.direction
         x1 = self.XG0 - self.accuracy * self.direction
-        if self.my_function(x0) > self.my_function(self.XG0) and self.my_function(x1) > self.my_function(self.XG0):
+        if my_function(x0) > my_function(self.XG0) and my_function(x1) > my_function(self.XG0):
             return True  # 通过校验
         else:
             return False
@@ -124,6 +119,6 @@ class lineSearch:
 
 if __name__ == "__main__":
     aa = lineSearch()
-    aa.find_search_region()  # 找搜索区间
+    # aa.find_search_region()  # 找搜索区间
     print aa.final_solution()  # 线搜最优解
     print aa.test_solution()  # 测试结果是否满足 "高低高" 属性
