@@ -10,7 +10,7 @@ from function2dim2 import *
 
 # import wolfSearch
 
-class Newton2:
+class NewtonBFGS:
     def __init__(self):
         # 需要进行线搜的目标函数
         self.A = 0
@@ -61,5 +61,5 @@ class Newton2:
 
 
 if __name__ == "__main__":
-    aa = Newton2()
+    aa = NewtonBFGS()
     aa.final_solution()  # 找最优解
