@@ -10,6 +10,7 @@ class BBsearch:
         pass
 
     def getAlpha(self):
+        pass
 
 
     # 设置初始点
