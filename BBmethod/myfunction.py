@@ -3,7 +3,7 @@
 import numpy as np
 
 G = np.diag([1, 5, 10, 20])
-B = np.matrix([0, 0, 0, 0])
+B = np.matrix([0, 0, 0, 0]).T
 
 
 def f_gx(X):
@@ -11,4 +11,4 @@ def f_gx(X):
 
 
 def my_function(X):
-    return 0.5 * X.T * G * X + B.T * X
+    return float(0.5 * X.T * G * X + B.T * X)
