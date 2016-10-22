@@ -3,6 +3,7 @@
 from lineSearch import lineSearch  # 精确线搜
 # from wolfSearchStrong import lineSearch  # wolf 非精确线搜
 # from wolfSearch import lineSearch  # wolf 非精确线搜
+# from wolfSearchStrongO import lineSearch  # wolf 非精确线搜
 
 # import numpy as np
 from function2dim2 import *
