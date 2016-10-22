@@ -66,3 +66,4 @@ if __name__ == "__main__":
 	aa.set_first([1.5, 1.5])
 	aa.final_solution()  # 找最优解
 
+
