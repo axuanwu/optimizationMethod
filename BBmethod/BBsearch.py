@@ -8,7 +8,6 @@ class BBsearch:
     def __init__(self):
         self.X = np.matrix([1.0, 1, 1, 1]).T
         self.gk = np.matrix([1.0, 1, 1, 1]).T
-        self.gk0 = np.matrix([1.0, 1, 1, 1]).T
         self.accuracy = 10**-8
         self.alpha = 0
         self.i = 0
@@ -16,13 +15,12 @@ class BBsearch:
 
     @property
     def getAlpha(self):
-        return float(self.gk0.T * self.gk0)/float(self.gk0.T * G * self.gk0)
+        return float(self.gk.T * self.gk)/float(self.gk.T * G * self.gk)
 
     # 设置初始点
     def set_first(self, X):
         self.X = np.matrix(X).T
         self.gk = f_gx(self.X)
-        self.gk0 = f_gx(self.X)
 
     def final_solution(self):
         # 初始配置
@@ -34,10 +32,10 @@ class BBsearch:
 
     def next_solution(self):
         # 迭代一次
-        self.gk0 = self.gk.copy()
+        # 先计算 alpha 再更新 gk
         self.alpha = self.getAlpha
         self.gk = f_gx(self.X)
-        print self.i , self.alpha, my_function(self.X)
+        print self.i, self.alpha, my_function(self.X)  # 打印收敛轨迹
         self.i += 1
         self.X -= self.alpha * self.gk
         a = np.linalg.norm(self.gk)
